@@ -31,6 +31,10 @@
             tr:nth-child(even) {
                 background-color: #f2f2f2;
             }
+
+            .download-button {
+            margin-top: 20px;
+        }
         </style>
     </head>
 </head>
@@ -61,6 +65,45 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- <button class="download-button" onclick="downloadData()">Download CSV</button> -->
+
+    <script>
+        function convertArrayOfObjectsToCSV(data) {
+            var csv = '';
+            var keys = Object.keys(data[0]);
+
+            csv += keys.join(',') + '\n';
+
+            for (var i = 0; i < data.length; i++) {
+                var line = '';
+                for (var j = 0; j < keys.length; j++) {
+                    if (line !== '') line += ',';
+
+                    line += data[i][keys[j]];
+                }
+
+                csv += line + '\n';
+            }
+
+            return csv;
+        }
+
+        function downloadData() {
+            console.log('start')
+            var data = JSON.parse('{{ firebase_data|escapejs }}');
+            console.log('start', data)
+
+            var csv = convertArrayOfObjectsToCSV(data);
+console.log(csv)
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+            element.setAttribute('download', 'data.csv');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
 </body>
 
 {% endblock %}
