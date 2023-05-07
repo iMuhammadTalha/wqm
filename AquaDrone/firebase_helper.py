@@ -22,7 +22,8 @@ firebase_admin.initialize_app(cred, {
 def get_firebase_data():
     ref = db.reference('/UserID: GsjRI430w9hczwcNXiDo9XnNsJo1/0-0|5:0:0')
     data = ref.get()
-
+    data = [record for record in data if record is not None]
+    
     # Filter the data to exclude records with a specific column
     filtered_data = [record for record in data if record is not None and ('class' not in record or record['class'] is None)]
 

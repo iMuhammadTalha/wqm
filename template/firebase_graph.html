@@ -3,80 +3,156 @@
 
 {% block content %}
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Graph</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .graph-container {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+            margin-left: 3%;
+            margin-right: 3%;
+            margin-top: 100px;
+        }
+    </style>
+
 </head>
 <body>
-    <canvas id="dataChart" data-firebase-data="{{ firebase_data }}"></canvas>
+    <div class="grid-container">
+        <div class="graph-container" id="ph-graph-container"></div>
+        <div class="graph-container" id="conductivity-graph-container"></div>
+        <div class="graph-container" id="temperature-graph-container"></div>
+        <div class="graph-container" id="oxygen-graph-container"></div>
+    </div>
 
     <script>
-        // JavaScript code here
+        // Parse the JSON string into an object
+        var data = JSON.parse('{{ firebase_data|escapejs }}');
 
-        // Retrieve the data from the data attribute of the canvas element
-        const canvas = document.getElementById('dataChart');
-        const firebaseData = JSON.parse(canvas.getAttribute('firebase_data_json'));
 
-        // Extract the required data for the chart
-        const labels = firebaseData.map(item => item.Conductivity);
-        const conductivityData = firebaseData.map(item => item.Conductivity);
-        const oxygenData = firebaseData.map(item => item.Oxygen);
-        const temperatureData = firebaseData.map(item => item.Temperature);
-        const pHData = firebaseData.map(item => item.pH);
-        const latitudeData = firebaseData.map(item => item.Latitude);
-        const longitudeData = firebaseData.map(item => item.Longitude);
+        // Extract the necessary data for the graph
+        var ConductivityValues = data.map(record => parseFloat(record.Conductivity));
+        var phValues = data.map(record => parseFloat(record.pH));
+        var OxygenValues = data.map(record => parseFloat(record.Oxygen));
+        var TemperatureValues = data.map(record => parseFloat(record.Temperature));
 
-        // Create the line chart
-        const ctx = document.getElementById('dataChart').getContext('2d');
-        const dataChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Conductivity',
-                        data: conductivityData,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.5)',
-                        fill: false
-                    },
-                    {
-                        label: 'Oxygen',
-                        data: oxygenData,
-                        borderColor: 'blue',
-                        backgroundColor: 'rgba(0, 0, 255, 0.5)',
-                        fill: false
-                    },
-                    {
-                        label: 'Temperature',
-                        data: temperatureData,
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.5)',
-                        fill: false
-                    },
-                    // Add more datasets for other variables
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Conductivity'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        }
-                    }
-                }
+
+        // Create the graph using Plotly
+        var pHtrace = {
+            x: Array.from({length: phValues.length}, (_, i) => i + 1), // Use an array of sequential numbers for x-axis
+            y: phValues,
+            mode: 'lines',
+            type: 'scatter',
+            marker: {
+                size: 8,
+                color: 'blue'
             }
-        });
+        };
+        var pHlayout = {
+            title: 'Ph',
+            xaxis: {
+                title: ''
+            },
+            yaxis: {
+                title: 'pH'
+            },
+            plot_bgcolor: 'lightblue', // Update the background color here
+            paper_bgcolor: 'white' // Update the paper color here
+        };
+
+        // Create the graph using Plotly
+        var Conductivitytrace = {
+            x: Array.from({length: phValues.length}, (_, i) => i + 1), // Use an array of sequential numbers for x-axis
+            y: ConductivityValues,
+            mode: 'lines',
+            type: 'scatter',
+            marker: {
+                size: 8,
+                color: 'blue'
+            }
+        };
+        var Conductivitylayout = {
+            title: 'Conductivity',
+            xaxis: {
+                title: ''
+            },
+            yaxis: {
+                title: 'Conductivity'
+            },
+            plot_bgcolor: 'lightblue', // Update the background color here
+            paper_bgcolor: 'white' // Update the paper color here
+        };
+
+        // Create the graph using Plotly
+        var Temperaturetrace = {
+            x: Array.from({length: TemperatureValues.length}, (_, i) => i + 1), // Use an array of sequential numbers for x-axis
+            y: TemperatureValues,
+            mode: 'lines',
+            type: 'scatter',
+            marker: {
+                size: 8,
+                color: 'blue'
+            }
+        };
+
+        var Temperaturelayout = {
+            title: 'Temperature',
+            xaxis: {
+                title: ''
+            },
+            yaxis: {
+                title: 'Temperature'
+            },
+            plot_bgcolor: 'lightblue', // Update the background color here
+            paper_bgcolor: 'white' // Update the paper color here
+        };
+
+        // Create the graph using Plotly
+        var Oxygentrace = {
+            x: Array.from({length: OxygenValues.length}, (_, i) => i + 1), // Use an array of sequential numbers for x-axis
+            y: OxygenValues,
+            mode: 'lines',
+            type: 'scatter',
+            marker: {
+                size: 8,
+                color: 'blue'
+            }
+        };
+
+        var Oxygenlayout = {
+            title: 'Oxygen',
+            xaxis: {
+                title: ''
+            },
+            yaxis: {
+                title: 'Oxygen'
+            },
+            plot_bgcolor: 'lightblue', // Update the background color here
+            paper_bgcolor: 'white' // Update the paper color here
+        };
+
+        var pHgraphData = [pHtrace];
+        var ConductivitygraphData = [Conductivitytrace];
+        var TemperaturegraphData = [Temperaturetrace];
+        var OxygengraphData = [Oxygentrace];
+
+        Plotly.newPlot('ph-graph-container', pHgraphData, pHlayout);
+
+        Plotly.newPlot('conductivity-graph-container', ConductivitygraphData, Conductivitylayout);
+
+        Plotly.newPlot('temperature-graph-container', TemperaturegraphData, Temperaturelayout);
+
+        Plotly.newPlot('oxygen-graph-container', OxygengraphData, Oxygenlayout);
+
     </script>
 </body>
+
 
 {% endblock %}

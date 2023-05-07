@@ -37,7 +37,7 @@ def firebase_graph_view(request):
     firebase_data = get_firebase_data()
     firebase_data_json = json.dumps(firebase_data)
 
-    return render(request, 'firebase_graph.html', {'firebase_data_json': firebase_data_json})
+    return render(request, 'firebase_graph.html', {'firebase_data': firebase_data_json})
 
 def heatmap_data_view(request):
     heatmapData = get_heatmap_data()
