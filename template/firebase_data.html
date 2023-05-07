@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <head>
+        <title>Data</title>
+        <style>
+            table {
+                font-family: Arial, sans-serif;
+                border-collapse: collapse;
+                width: 95%;
+            }
+    
+            td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+                color: #dddddd;
+                font-weight: bold;
+                background-color: #1b95e0;
+            }
+
+    
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+</head>
+<body>
+    <table style="margin-left: 3%; margin-right: 3%; margin-top:100px;">
+        <thead>
+            <tr>
+                <th>Conductivity</th>
+                <th>Oxygen</th>
+                <th>Temperature</th>
+                <th>pH</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in firebase_data %}
+                <tr>
+                    <td>{{ item.Conductivity }}</td>
+                    <td>{{ item.Oxygen }}</td>
+                    <td>{{ item.Temperature }}</td>
+                    <td>{{ item.pH }}</td>
+                    <td>{{ item.Latitude }}</td>
+                    <td>{{ item.Longitude }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+{% endblock %}

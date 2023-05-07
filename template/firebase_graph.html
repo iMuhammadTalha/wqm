@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Graph</title>
+</head>
+<body>
+    <canvas id="dataChart" data-firebase-data="{{ firebase_data }}"></canvas>
+
+    <script>
+        // JavaScript code here
+
+        // Retrieve the data from the data attribute of the canvas element
+        const canvas = document.getElementById('dataChart');
+        const firebaseData = JSON.parse(canvas.getAttribute('firebase_data_json'));
+
+        // Extract the required data for the chart
+        const labels = firebaseData.map(item => item.Conductivity);
+        const conductivityData = firebaseData.map(item => item.Conductivity);
+        const oxygenData = firebaseData.map(item => item.Oxygen);
+        const temperatureData = firebaseData.map(item => item.Temperature);
+        const pHData = firebaseData.map(item => item.pH);
+        const latitudeData = firebaseData.map(item => item.Latitude);
+        const longitudeData = firebaseData.map(item => item.Longitude);
+
+        // Create the line chart
+        const ctx = document.getElementById('dataChart').getContext('2d');
+        const dataChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Conductivity',
+                        data: conductivityData,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                        fill: false
+                    },
+                    {
+                        label: 'Oxygen',
+                        data: oxygenData,
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.5)',
+                        fill: false
+                    },
+                    {
+                        label: 'Temperature',
+                        data: temperatureData,
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 255, 0, 0.5)',
+                        fill: false
+                    },
+                    // Add more datasets for other variables
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Conductivity'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+{% endblock %}
