@@ -39,7 +39,7 @@ def get_firebase_data():
         # pred = prob.argmax(axis=1)
         # out = pred[0]
         # record['class'] = out
-        record['class'] = random.randint(0, 4)
+        record['Class'] = random.randint(0, 4)
 
     return data
 
