@@ -3,7 +3,6 @@
 
 {% block content %}
 <head>
-    <title>Heatmap</title>
     <style>
         /* Add some basic styling to the heatmap container */
         .heatmap-container {
@@ -20,8 +19,7 @@
 </head>
 <body>
     <div class="heatmap-container">
-
-        <img src="{{ MEDIA_URL }}{{ heatmap_image_path }}" height="300px" width="fit-content" alt="Result">
+        <iframe src="{{ MEDIA_URL }}{{ heatmap_image_path }}" height="500" width="1000"></iframe>
     </div>
 </body>
 {% endblock %}

@@ -17,6 +17,10 @@ from .firebase_helper import get_firebase_data, get_heatmap_data
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+import plotly.offline as pyo
+import plotly.express as px
+import pandas as pd 
+
 test_image1 = "image12.png"
 
 def index(request):
@@ -40,50 +44,25 @@ def firebase_graph_view(request):
     return render(request, 'firebase_graph.html', {'firebase_data': firebase_data_json})
 
 def heatmap_data_view(request):
-    heatmapData = get_heatmap_data()
+    heatmapData,lat_val,long_val = get_heatmap_data()
+
+    hm_data=np.array(heatmapData)
+    lat_data=np.array(lat_val)
+    long_data=np.array(long_val)
+    df = pd.DataFrame()
+    df['Latitude']=lat_data
+    df['Longitude']=long_data
+    df['Class_pred']=hm_data
+    df.head()
+    fig = px.density_mapbox(df, lat='Latitude', lon='Longitude', z='Class_pred',
+                        mapbox_style="stamen-terrain")
     
-    # Reshape the 1D array to a 2D array
-    # heatmapData = np.reshape(heatmapData, (-1, 1))
+    heatmap_image_path = os.path.join(settings.MEDIA_ROOT, 'heat.html')
 
-    # Create a figure and axes
-    fig, ax = plt.subplots()
-
-    total_elements = len(heatmapData)
-
-    # Find the largest square number less than or equal to the total number of elements
-    square_number = int(np.sqrt(total_elements))
-    rows = columns = square_number
-
-    # Calculate the number of elements to drop
-    drop_elements = total_elements - (rows * columns)
-
-    # Drop the required number of elements from the end of the array
-    dropped_data = heatmapData[:-drop_elements]
-
-    # Reshape the remaining data into a 2D array with the calculated shape
-    reshaped_data = np.reshape(dropped_data, (rows, columns))
-
-
-
-
-    # Create the heatmap using seaborn
-    heatmap = sns.heatmap(reshaped_data, annot=True, cmap='crest', cbar=False, vmin=0, vmax=4)
-    
-    # Set the x and y-axis labels
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Y-axis')
-
-    # Set the title of the heatmap
-    ax.set_title('Heatmap')
-
-    # Save the heatmap as an image file
-    heatmap_image_path = os.path.join(settings.MEDIA_ROOT, 'heatmap.png')
-    plt.savefig(heatmap_image_path)
-
-    # Close the figure to free up resources
-    plt.close(fig)
+    pyo.plot(fig, filename=heatmap_image_path)
 
     return render(request, 'heatmap.html', {'heatmap_image_path': heatmap_image_path, 'MEDIA_URL': settings.MEDIA_URL})
+
 
 def main(request):
     return render(request, 'main.html')

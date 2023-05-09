@@ -48,10 +48,14 @@ def get_firebase_data():
 def get_heatmap_data():
     ref = db.reference('/UserID: GsjRI430w9hczwcNXiDo9XnNsJo1/0-0|5:0:0')
     data = ref.get()
+    data = [record for record in data if record is not None]
+
 
     # Filter the data to exclude records with a specific column
     filtered_data = [record for record in data if record is not None and ('class' not in record or record['class'] is None)]
     class_values = []  # Array to store the 'class' values
+    lat_values = []
+    long_values = []
 
     # Add 'class' key with value 1 to each record
     for record in filtered_data:
@@ -68,6 +72,8 @@ def get_heatmap_data():
         # record['class'] = out
         record['class'] = random.randint(0, 4)
         class_values.append(record['class'])
+        lat_values.append(float(record['Latitude']))
+        long_values.append(float(record['Longitude']))
 
 
-    return class_values
+    return class_values, lat_values,long_values
