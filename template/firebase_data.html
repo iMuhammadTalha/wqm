@@ -17,12 +17,13 @@
                 border: 1px solid #dddddd;
                 text-align: left;
                 padding: 8px;
+                color: black;
             }
             th {
                 border: 1px solid #dddddd;
                 text-align: left;
                 padding: 8px;
-                color: #dddddd;
+                color: white;
                 font-weight: bold;
                 background-color: #1b95e0;
             }
@@ -49,8 +50,22 @@
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th>Class</th>
+                <th>WQI</th>
             </tr>
         </thead>
+        </table>
+        <table style="margin-left: 3%; margin-right: 3%;">
+            <thead>
+                <tr>
+                    <th style="background-color: red; color: black;">0-25 very bad</th>
+                    <th style="background-color: orange; color: black;">25-50 bad</th>
+                    <th style="background-color: yellow; color: black;">50-70 Medium</th>
+                    <th style="background-color: lightgreen; color: black;">70-90 Good</th>
+                    <th style="background-color: green; color: black;">90-100 Excellent</th>
+                </tr>
+            </thead>
+        </table>
+        <table style="margin-left: 3%; margin-right: 3%;">
         <tbody>
             {% for item in firebase_data %}
                 <tr>
@@ -61,6 +76,7 @@
                     <td>{{ item.Latitude }}</td>
                     <td>{{ item.Longitude }}</td>
                     <td>{{ item.Class }}</td>
+                    <td {% if item.WQI <= 25 %}style="background-color: red;" {% elif item.WQI <= 50 %}style="background-color: orange;" {% elif item.WQI <= 70 %}style="background-color: yellow;" {% elif item.WQI <= 90 %}style="background-color: lightgreen;" {% else %}style="background-color: green;" {% endif %}>{{ item.WQI }}</td>
                 </tr>
             {% endfor %}
         </tbody>

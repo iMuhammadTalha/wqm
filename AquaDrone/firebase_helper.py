@@ -41,6 +41,7 @@ def get_firebase_data():
         # out = pred[0]
         # record['class'] = out
         record['Class'] = random.randint(0, 4)
+        record['WQI'] = random.randint(0, 100)
 
     return data
 
