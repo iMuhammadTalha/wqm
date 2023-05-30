@@ -16,8 +16,9 @@ django-admin startproject Agri
 
 
 Run project using command:
-python manage.py runserver
+python manage.py runserver 8001
 
 Docker: 
 docker build -t AquaDrone .
-docker run -p 8000:8000 AquaDrone
+
+docker run -p 8001:8001 AquaDrone
