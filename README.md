@@ -19,6 +19,6 @@ Run project using command:
 python manage.py runserver 8001
 
 Docker: 
-docker build -t AquaDrone .
+docker build -t aquadrone .
 
-docker run -p 8001:8001 AquaDrone
+docker run -p 8001:8001 aquadrone
