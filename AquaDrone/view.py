@@ -97,7 +97,7 @@ def heatmap_data_view(request):
     #ax.set_title('Heatmap')
 
     # Save the heatmap as an image file
-    heatmap_image_path = os.path.join(settings.MEDIA_ROOT, 'heat.html')
+    heatmap_image_path = 'heat.html'
     #plt.savefig(heatmap_image_path)
 
     # Close the figure to free up resources
