@@ -46,21 +46,25 @@ def firebase_graph_view(request):
 
 
 def heatmap_data_view(request):
-    heatmapData,lat_val,long_val = get_heatmap_data()
+
+    heatmap_image_path = os.path.join(settings.MEDIA_ROOT, 'heat.html')
+
+    if not os.path.exists(heatmap_image_path):
+        heatmapData,lat_val,long_val = get_heatmap_data()
     
-    # Reshape the 1D array to a 2D array
-    # heatmapData = np.reshape(heatmapData, (-1, 1))
-    hm_data=np.array(heatmapData)
-    lat_data=np.array(lat_val)
-    long_data=np.array(long_val)
-    df = pd.DataFrame()
-    df['Latitude']=lat_data
-    df['Longitude']=long_data
-    df['Class']=hm_data
-    df.head()
-    fig = px.density_mapbox(df, lat='Latitude', lon='Longitude', z='Class',
-                        mapbox_style="stamen-terrain",
-                        color_continuous_scale = ['darkred', 'orange', 'yellow', 'lawngreen', 'green'], title='Heatmap')
+        # Reshape the 1D array to a 2D array
+        # heatmapData = np.reshape(heatmapData, (-1, 1))
+        hm_data=np.array(heatmapData)
+        lat_data=np.array(lat_val)
+        long_data=np.array(long_val)
+        df = pd.DataFrame()
+        df['Latitude']=lat_data
+        df['Longitude']=long_data
+        df['Class']=hm_data
+        df.head()
+        fig = px.density_mapbox(df, lat='Latitude', lon='Longitude', z='Class',
+                            mapbox_style="stamen-terrain",
+                            color_continuous_scale = ['darkred', 'orange', 'yellow', 'lawngreen', 'green'], title='Heatmap')
     # Create a figure and axes
     
     #fig, ax = plt.subplots()
@@ -97,14 +101,14 @@ def heatmap_data_view(request):
     #ax.set_title('Heatmap')
 
     # Save the heatmap as an image file
-    heatmap_image_path = 'heat.html'
     #plt.savefig(heatmap_image_path)
 
     # Close the figure to free up resources
     #plt.close(fig)
-    pyo.plot(fig, filename=heatmap_image_path, auto_open=False)
+    if not os.path.exists(heatmap_image_path):
+        pyo.plot(fig, filename=heatmap_image_path, auto_open=False)
 
-    return render(request, 'heatmap.html', {'heatmap_image_path': heatmap_image_path, 'MEDIA_URL': settings.MEDIA_URL})
+    return render(request, 'heatmap.html', {'heatmap_image_path': 'heat.html', 'MEDIA_URL': settings.MEDIA_URL})
 
 def main(request):
     return render(request, 'main.html')

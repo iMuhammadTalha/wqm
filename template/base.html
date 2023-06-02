@@ -87,7 +87,7 @@
                     <div class="col-md-1 col-sm-1 col-xs-6">
                         <div class="logo">
                             <!-- <h1><a href="index.html" title="Dreri">Internet of Things Lab</a></h1> -->
-                            <a href="index" title="Dreri"><img src="{% static 'images/aquadrone.png' %}" height="60px" alt=""></a>
+                            <a href="{% url 'index' %}" title="Dreri"><img src="{% static 'images/aquadrone.png' %}" height="60px" alt=""></a>
                             <!-- <img src="images/OB.png" height="70px" alt=""> -->
                             <!-- <img src="images/blue.png" height="70px" alt=""> -->
 
@@ -97,10 +97,10 @@
                     <div class="col-md-11 col-sm-11 col-xs-6">
                         <div class="menu text-right hidden-sm hidden-xs">
                             <ul>
-                                <li><a onclick="location.href='/index'" href="javascript:void(0);">Home</a></li>
-                                <li><a onclick="location.href='/aqua-data'" href="javascript:void(0);">Data</a></li>
-                                <li><a onclick="location.href='/aqua-graph'" href="javascript:void(0);">Graph</a></li>
-                                <li><a onclick="location.href='/aqua-heatmap'" href="javascript:void(0);">Heatmap</a></li>
+                                <li><a onclick="location.href='/index'" href="{% url 'index' %}">Home</a></li>
+                                <li><a onclick="location.href='/aqua-data'" href="{% url 'aqua-data' %}">Data</a></li>
+                                <li><a onclick="location.href='/aqua-graph'" href="{% url 'aqua-graph' %}">Graph</a></li>
+                                <li><a onclick="location.href='/aqua-heatmap'" href="{% url 'aqua-heatmap' %}">Heatmap</a></li>
     
                                 <!-- <li><a onclick="location.href='/team'" href="javascript:void(0);">Team</a></li> -->
                  
